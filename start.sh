@@ -31,4 +31,12 @@ else
 	sed -Ei "s/%PORT_XHTTP%/$PORT_XHTTP/g" /etc/supervisor.d/node_xhttp.ini
 fi
 
+INDEX_PORT=$SERVER_PORT
+[ -z "$INDEX_PORT" ] && INDEX_PORT=$PORT
+if [ -z "$ARGO_AUTH" -o -z "$ARGO_DOMAIN" -o -z "$INDEX_PORT" -o "$INDEX_PORT" = "$PORT_WS" -o "$INDEX_PORT" = "$PORT_XHTTP" ]; then
+	rm -rf /etc/supervisor.d/node.ini
+else
+	sed -Ei "s/%SERVER_PORT%/$INDEX_PORT/g" /etc/supervisor.d/node.ini
+fi
+
 exec /usr/bin/supervisord -c /etc/supervisord.conf -n
