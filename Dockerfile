@@ -19,8 +19,8 @@ RUN /app/nezha.sh
 
 RUN mkdir -p /etc/supervisor.d
 COPY cli.ini /etc/supervisor.d/cli.ini
-COPY node.ini /etc/supervisor.d/node.ini
 COPY nezha.ini /etc/supervisor.d/nezha.ini
+COPY node*.ini /etc/supervisor.d/
 
 COPY start.sh /start.sh
 

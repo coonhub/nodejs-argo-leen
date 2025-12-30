@@ -5,7 +5,7 @@ mkdir -p /var/log
 
 [ -z "$DEVICE_NAME" ] && DEVICE_NAME="$(hostname)"
 [ -z "$DEVICE_NAME" ] && DEVICE_NAME=$(date +%Y%m%d-%H%M) || DEVICE_NAME="$DEVICE_NAME-$(date +%Y%m%d-%H%M)"
-sed -Ei "s/DEVICE_NAME/$DEVICE_NAME/g" /etc/supervisor.d/cli.ini
+sed -Ei "s/%DEVICE_NAME%/$DEVICE_NAME/g" /etc/supervisor.d/cli.ini
 
 if [ -x /usr/bin/nezha-agent ] && [ -f /etc/nezha-agent/config.yml ] && [ -n "$NZ_SERVER" ] && [ -n "$NZ_CLIENT_SECRET" ]; then
 	[ -z "$NZ_UUID" ] && NZ_UUID=$(uuidgen)
@@ -17,6 +17,18 @@ if [ -x /usr/bin/nezha-agent ] && [ -f /etc/nezha-agent/config.yml ] && [ -n "$N
 	# /usr/bin/nezha-agent -c /etc/nezha-agent/config.yml
 else
 	rm -rf /etc/supervisor.d/nezha.ini
+fi
+
+if [ -z "$PORT_WS" ]; then
+	rm -rf /etc/supervisor.d/node_ws.ini
+else
+	sed -Ei "s/%PORT_WS%/$PORT_WS/g" /etc/supervisor.d/node_ws.ini
+fi
+
+if [ -z "$PORT_XHTTP" ]; then
+	rm -rf /etc/supervisor.d/node_xhttp.ini
+else
+	sed -Ei "s/%PORT_XHTTP%/$PORT_XHTTP/g" /etc/supervisor.d/node_xhttp.ini
 fi
 
 exec /usr/bin/supervisord -c /etc/supervisord.conf -n
