@@ -19,3 +19,5 @@ cp nezha.ini /etc/supervisor.d/nezha.ini
 cp node*.ini /etc/supervisor.d/
 cp start.sh /start.sh
 chmod +x /start.sh || exit 1
+
+exit 0
