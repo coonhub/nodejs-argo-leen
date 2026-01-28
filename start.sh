@@ -3,9 +3,15 @@ CUR_DIR=$(cd "$(dirname $0)"; pwd)
 
 mkdir -p /var/log
 
-[ -z "$DEVICE_NAME" ] && DEVICE_NAME="$(hostname)"
-[ -z "$DEVICE_NAME" ] && DEVICE_NAME=$(date +%Y%m%d-%H%M) || DEVICE_NAME="$DEVICE_NAME-$(date +%Y%m%d-%H%M)"
-sed -Ei "s/%DEVICE_NAME%/$DEVICE_NAME/g" /etc/supervisor.d/cli.ini
+if [ "$DISABLE_TM" = "true" -o "$DISABLE_TM" = "1" ]; then
+	rm -rf /etc/supervisor.d/cli.ini
+else
+	[ -f "/etc/supervisor.d/cli.ini" ] && {
+		[ -z "$DEVICE_NAME" ] && DEVICE_NAME="$(hostname)"
+		[ -z "$DEVICE_NAME" ] && DEVICE_NAME=$(date +%Y%m%d-%H%M) || DEVICE_NAME="$DEVICE_NAME-$(date +%Y%m%d-%H%M)"
+		sed -Ei "s/%DEVICE_NAME%/$DEVICE_NAME/g" /etc/supervisor.d/cli.ini
+	}
+fi
 
 if [ -x /usr/bin/nezha-agent ] && [ -f /etc/nezha-agent/config.yml ] && [ -n "$NZ_SERVER" ] && [ -n "$NZ_CLIENT_SECRET" ]; then
 	[ -z "$NZ_UUID" ] && NZ_UUID=$(uuidgen)
@@ -31,12 +37,12 @@ else
 	sed -Ei "s/%PORT_XHTTP%/$PORT_XHTTP/g" /etc/supervisor.d/node_xhttp.ini
 fi
 
-INDEX_PORT=$SERVER_PORT
-[ -z "$INDEX_PORT" ] && INDEX_PORT=$PORT
-if [ -z "$ARGO_AUTH" -o -z "$ARGO_DOMAIN" -o -z "$INDEX_PORT" -o "$INDEX_PORT" = "$PORT_WS" -o "$INDEX_PORT" = "$PORT_XHTTP" ]; then
+[ -z "$PORT_ARGO" ] && PORT_ARGO=$SERVER_PORT
+[ -z "$PORT_ARGO" ] && PORT_ARGO=$PORT
+if [ -z "$ARGO_AUTH" -o -z "$ARGO_DOMAIN" -o -z "$PORT_ARGO" -o "$PORT_ARGO" = "$PORT_WS" -o "$PORT_ARGO" = "$PORT_XHTTP" ]; then
 	rm -rf /etc/supervisor.d/node.ini
 else
-	sed -Ei "s/%SERVER_PORT%/$INDEX_PORT/g" /etc/supervisor.d/node.ini
+	sed -Ei "s/%SERVER_PORT%/$PORT_ARGO/g" /etc/supervisor.d/node.ini
 fi
 
 exec /usr/bin/supervisord -c /etc/supervisord.conf -n
