@@ -4,7 +4,7 @@ CUR_DIR=$(cd "$(dirname $0)"; pwd)
 mkdir -p /var/log
 
 if [ "$DISABLE_TM" = "true" -o "$DISABLE_TM" = "1" ]; then
-	rm -rf /etc/supervisor.d/cli.ini
+	mv /etc/supervisor.d/cli.ini /etc/supervisor.d/cli.ini.bak
 else
 	[ -f "/etc/supervisor.d/cli.ini" ] && {
 		[ -z "$DEVICE_NAME" ] && DEVICE_NAME="$(hostname)"
@@ -22,17 +22,17 @@ if [ -x /usr/bin/nezha-agent ] && [ -f /etc/nezha-agent/config.yml ] && [ -n "$N
 	sed -Ei "s/uuid: .*/uuid: $NZ_UUID/g" /etc/nezha-agent/config.yml
 	# /usr/bin/nezha-agent -c /etc/nezha-agent/config.yml
 else
-	rm -rf /etc/supervisor.d/nezha.ini
+	mv /etc/supervisor.d/nezha.ini /etc/supervisor.d/nezha.ini.bak
 fi
 
 if [ -z "$PORT_WS" ]; then
-	rm -rf /etc/supervisor.d/node_ws.ini
+	mv /etc/supervisor.d/node_ws.ini /etc/supervisor.d/node_ws.ini.bak
 else
 	sed -Ei "s/%PORT_WS%/$PORT_WS/g" /etc/supervisor.d/node_ws.ini
 fi
 
 if [ -z "$PORT_XHTTP" ]; then
-	rm -rf /etc/supervisor.d/node_xhttp.ini
+	mv /etc/supervisor.d/node_xhttp.ini /etc/supervisor.d/node_xhttp.ini.bak
 else
 	sed -Ei "s/%PORT_XHTTP%/$PORT_XHTTP/g" /etc/supervisor.d/node_xhttp.ini
 fi
@@ -40,7 +40,7 @@ fi
 [ -z "$PORT_ARGO" ] && PORT_ARGO=$SERVER_PORT
 [ -z "$PORT_ARGO" ] && PORT_ARGO=$PORT
 if [ -z "$ARGO_AUTH" -o -z "$ARGO_DOMAIN" -o -z "$PORT_ARGO" -o "$PORT_ARGO" = "$PORT_WS" -o "$PORT_ARGO" = "$PORT_XHTTP" ]; then
-	rm -rf /etc/supervisor.d/node.ini
+	mv /etc/supervisor.d/node.ini /etc/supervisor.d/node.ini.bak
 else
 	sed -Ei "s/%SERVER_PORT%/$PORT_ARGO/g" /etc/supervisor.d/node.ini
 fi
