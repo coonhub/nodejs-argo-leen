@@ -14,6 +14,7 @@ RUN npm install
 RUN apk update && apk upgrade &&\
     apk add --no-cache bash openssl curl gcompat iproute2 coreutils libstdc++ libgcc icu-libs supervisor uuidgen
 
+RUN ls -1 /app/
 RUN chmod +x /app/nezha.sh
 RUN /app/nezha.sh
 
