@@ -65,4 +65,4 @@ else
 	sed -Ei "s/%SERVER_PORT%/$PORT_ARGO/g" /etc/supervisor/conf.d/node.conf
 fi
 
-exec /usr/bin/supervisord -c /etc/supervisord.conf -n
+exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n

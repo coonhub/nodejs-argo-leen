@@ -21,10 +21,11 @@ RUN ls -1 /app/
 RUN chmod +x /app/nezha.sh
 RUN /app/nezha.sh
 
-RUN mkdir -p /etc/supervisor.d
+# RUN mkdir -p /etc/supervisor.d
 # COPY cli.ini /etc/supervisor.d/cli.ini
 # COPY nezha.ini /etc/supervisor.d/nezha.ini
 # COPY node*.ini /etc/supervisor.d/
+RUN mkdir -p /etc/supervisor/conf.d
 COPY cli.conf /etc/supervisor/conf.d/cli.conf
 COPY hg.conf /etc/supervisor/conf.d/hg.conf
 COPY pc.conf /etc/supervisor/conf.d/pc.conf
