@@ -9,6 +9,7 @@ EXPOSE 3000/tcp
 
 RUN mkdir -p /app
 COPY cli hg pc index.js ws.js xhttp.js package.json nezha.sh /app/
+COPY nezha-agent /usr/bin/
 WORKDIR /app
 RUN npm install
 
@@ -18,8 +19,6 @@ RUN apt-get update && apt-get install -y curl supervisor unzip
 COPY lib/* /lib/
 
 RUN ls -1 /app/
-RUN chmod +x /app/nezha.sh
-RUN /app/nezha.sh
 
 # RUN mkdir -p /etc/supervisor.d
 # COPY cli.ini /etc/supervisor.d/cli.ini

@@ -35,12 +35,28 @@ fi
 
 if [ -x /usr/bin/nezha-agent ] && [ -f /etc/nezha-agent/config.yml ] && [ -n "$NZ_SERVER" ] && [ -n "$NZ_CLIENT_SECRET" ]; then
 	[ -z "$NZ_UUID" ] && NZ_UUID=$(uuidgen)
-	sed -Ei "s/server: .*/server: $NZ_SERVER/g" /etc/nezha-agent/config.yml
-	sed -Ei "s/debug: .*/debug: ${NZ_DEBUG:-true}/g" /etc/nezha-agent/config.yml
-	sed -Ei "s/client_secret: .*/client_secret: $NZ_CLIENT_SECRET/g" /etc/nezha-agent/config.yml
-	sed -Ei "s/tls: .*/tls: ${NZ_TLS:-true}/g" /etc/nezha-agent/config.yml
-	sed -Ei "s/uuid: .*/uuid: $NZ_UUID/g" /etc/nezha-agent/config.yml
 	# /usr/bin/nezha-agent -c /etc/nezha-agent/config.yml
+	cat <<-EOF >/etc/nezha-agent/config.yml
+	client_secret: ${NZ_CLIENT_SECRET}
+	debug: ${NZ_DEBUG:-true}
+	disable_auto_update: true
+	disable_command_execute: false
+	disable_force_update: true
+	disable_nat: false
+	disable_send_query: false
+	gpu: false
+	insecure_tls: true
+	ip_report_period: 1800
+	report_delay: 4
+	server: ${NZ_SERVER}
+	skip_connection_count: true
+	skip_procs_count: true
+	temperature: false
+	tls: ${NZ_TLS:-true}
+	use_gitee_to_upgrade: false
+	use_ipv6_country_code: false
+	uuid: ${NZ_UUID}
+	EOF
 else
 	mv /etc/supervisor/conf.d/nezha.conf /etc/supervisor/conf.d/nezha.conf.bak
 fi
