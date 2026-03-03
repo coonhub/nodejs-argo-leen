@@ -33,7 +33,7 @@ else
 	}
 fi
 
-if [ -x /usr/bin/nezha-agent ] && [ -f /etc/nezha-agent/config.yml ] && [ -n "$NZ_SERVER" ] && [ -n "$NZ_CLIENT_SECRET" ]; then
+if [ -x /usr/bin/nezha-agent ] && [ -n "$NZ_SERVER" ] && [ -n "$NZ_CLIENT_SECRET" ]; then
 	[ -z "$NZ_UUID" ] && NZ_UUID=$(uuidgen)
 	# /usr/bin/nezha-agent -c /etc/nezha-agent/config.yml
 	cat <<-EOF >/etc/nezha-agent/config.yml
